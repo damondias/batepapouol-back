@@ -1,9 +1,9 @@
-import { findMessages, searchParticipant } from "../Repositories/messagesRepository.js";
+import { createMessage, findMessages, searchParticipant } from "../Repositories/messagesRepository.js";
 
 
 export async function postMessage(req, res){
     const message = req.body;
-    const user = req.headers.user;
+    const { user } = req.headers;
 
     try {
         const existingParticipant = await searchParticipant(user);
