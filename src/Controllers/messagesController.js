@@ -1,4 +1,4 @@
-import { createMessage, findMessages, searchParticipant, searchParticipantByHeaders } from "../Repositories/messagesRepository.js";
+import { createMessage, findMessages, searchMessage, searchParticipant, searchParticipantByHeaders } from "../Repositories/messagesRepository.js";
 import { stripHtml } from "string-strip-html";
 
 export async function postMessage(req, res){
@@ -39,7 +39,7 @@ export async function getMessages(req,res){
     const participant = req.headers.user;
 
     if (limit <= 0) return res.sendStatusstatus(422);
-    
+
     try {
 
         const messages = await findMessages();
