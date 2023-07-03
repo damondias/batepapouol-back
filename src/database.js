@@ -8,7 +8,7 @@ let db;
 
 mongoClient.connect()
            .then(()=> {
-                db = mongoClient.db()
+                db = mongoClient.db("batePapoUol");
                 console.log(" MongoDB database is connected")
                 })
            .catch((err) => console.log(err.message))
