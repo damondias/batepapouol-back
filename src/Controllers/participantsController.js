@@ -6,7 +6,6 @@ export async function postParticipant(req, res){
     try {
 
         const existingParticipant = await verifyParticipant(participant);
-        console.log(existingParticipant);
         if (existingParticipant) {
           return res.sendStatus(409);
         }

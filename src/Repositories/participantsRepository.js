@@ -2,6 +2,7 @@ import db from "../database.js";
 import dayjs from "dayjs"
 
 export async function verifyParticipant(participant){
+
     return await db.collection('participants').findOne({ name: participant.name });
 }
 
