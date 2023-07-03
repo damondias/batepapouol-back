@@ -1,5 +1,4 @@
-import { createMessage, findMessages, searchParticipant } from "../Repositories/messagesRepository.js";
-
+import { createMessage, findMessages, searchParticipant, searchParticipantByHeaders } from "../Repositories/messagesRepository.js";
 
 export async function postMessage(req, res){
     const message = req.body;
@@ -20,7 +19,7 @@ export async function postMessage(req, res){
 
 function filterParticipantMessages(message, participant) {
     const { to, from, type } = message;
-  
+    
     const isFromOrToParticipant = to === participant || from === participant || to === 'Todos';
     const isPublic = type === 'message';
   
@@ -44,6 +43,56 @@ export async function getMessages(req,res){
         return res.send(participantMessages.slice(-limit));
         }
         res.send(participantMessages);
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+}
+
+export async function updateMessage(req,res){
+    const message = req.body;
+    const { id } = req.params;
+    const { user } = req.headers;
+
+    try {
+
+        const existingParticipant = await searchParticipantByHeaders(user);
+        if (!existingParticipant) {
+        return res.sendStatus(422);
+        }
+
+        const existingMessage = await searchMessage(id);
+        if (!existingMessage) {
+        return res.sendStatus(404);
+        }
+
+        if (existingMessage.from !== user) {
+        return res.sendStatus(401);
+        }
+
+        await updateMessage(id, message);
+        res.sendStatus(201);
+
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+}
+
+export async function deleteMessage(req,res){
+    const { id } = req.params;
+    const participant = req.headers.user;
+
+    try {
+        const existingMessage = await searchMessage(id);
+        if (!existingMessage) {
+          return res.sendStatus(404);
+        }
+    
+        if (existingMessage.from !== participant) {
+          return res.sendStatus(401);
+        }
+        
+        await deleteMessage(existingMessage._id)
+        res.sendStatus(200); 
     } catch (error) {
         return res.status(500).send(error.message);
     }
