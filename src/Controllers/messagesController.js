@@ -38,7 +38,7 @@ export async function getMessages(req,res){
     const limit = parseInt(req.query.limit);
     const participant = req.headers.user;
 
-    if (limit <= 0) return res.sendStatusstatus(422);
+    if (limit <= 0) return res.sendStatus(422);
 
     try {
 
