@@ -26,3 +26,17 @@ export async function findParticipants(){
 
     return await db.collection("participants").find({}).toArray();
 }
+
+export async function verifyParticipantByHeaders(user){
+
+    return await db.collection("participants").findOne({ name: user })
+}
+
+export async function updateStatus(existingParticipant){
+
+    return await db.collection("participants").updateOne({
+        _id: existingParticipant._id
+    }, {
+        $set: { lastStatus: Date.now() }
+    });
+}

@@ -1,4 +1,4 @@
-import { createParticipant, findParticipants, generateStatus, verifyParticipant } from "../Repositories/participantsRepository.js";
+import { createParticipant, findParticipants, generateStatus, updateStatus, verifyParticipant, verifyParticipantByHeaders } from "../Repositories/participantsRepository.js";
 
 export async function postParticipant(req, res){
     const participant = req.body;
@@ -24,6 +24,24 @@ export async function getParticipants(req, res){
     try {
         const participants = await findParticipants();
         res.send(participants);
+    } catch (error) {
+        return res.status(500).send(error.message);
+    }
+}
+
+export async function postStatus(req, res){
+    const { user } = req.headers;
+
+    try {
+
+        const existingParticipant = await verifyParticipantByHeaders(user);
+
+        if (!existingParticipant) {
+        return res.sendStatus(404);
+        }
+
+        await updateStatus(existingParticipant);
+        res.sendStatus(200);
     } catch (error) {
         return res.status(500).send(error.message);
     }
