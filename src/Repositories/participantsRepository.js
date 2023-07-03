@@ -21,3 +21,8 @@ export async function generateStatus({ name }){
         time: dayjs().format("HH:mm:ss")
     });
 }
+
+export async function findParticipants(){
+
+    return await db.collection("participants").find({}).toArray();
+}
