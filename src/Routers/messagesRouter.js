@@ -6,5 +6,6 @@ import { getMessages, postMessage } from "../Controllers/messagesController.js";
 const messagesRouter = Router();
 
 messagesRouter.post("/messages", validateSchemaMiddleware(messageSchema), postMessage);
-messagesRouter.get("/messages", getMessages)
+messagesRouter.get("/messages", getMessages);
+
 export default messagesRouter;
