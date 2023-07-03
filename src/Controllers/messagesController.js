@@ -1,8 +1,12 @@
 import { createMessage, findMessages, searchParticipant, searchParticipantByHeaders } from "../Repositories/messagesRepository.js";
+import { stripHtml } from "string-strip-html";
 
 export async function postMessage(req, res){
     const message = req.body;
     const { user } = req.headers;
+
+    message.to = stripHtml(message.to).result.trim();
+    message.text = stripHtml(message.text).result.trim();
 
     try {
         const existingParticipant = await searchParticipant(user);
@@ -34,6 +38,8 @@ export async function getMessages(req,res){
     const limit = parseInt(req.query.limit);
     const participant = req.headers.user;
 
+    if (limit <= 0) return res.sendStatusstatus(422);
+    
     try {
 
         const messages = await findMessages();

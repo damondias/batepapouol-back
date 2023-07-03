@@ -1,8 +1,11 @@
 import { createParticipant, findParticipants, generateStatus, updateStatus, verifyParticipant, verifyParticipantByHeaders } from "../Repositories/participantsRepository.js";
+import { stripHtml } from "string-strip-html";
 
 export async function postParticipant(req, res){
     const participant = req.body;
 
+    participant.name = stripHtml(participant.name).result.trim();
+    
     try {
 
         const existingParticipant = await verifyParticipant(participant);
